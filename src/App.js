@@ -50,8 +50,8 @@ function App() {
       // This is the first operation in the chain
       newSubTotal = parseFloat(operand || 0);
     } else {
-      // eslint-disable-next-line no-eval
       if (operator === '/' && operand === '0') throw new Error('Division by zero.');
+      // eslint-disable-next-line no-eval
       newSubTotal = eval(`${subTotal.toString(10)} ${operator} ${operand}`);
     }
     setSubTotal(newSubTotal);
