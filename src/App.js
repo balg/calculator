@@ -4,10 +4,14 @@ import Display from './components/Display/Display';
 import './App.css';
 
 function App() {
-  const [operand, setOperand] = useState(null);
+  const [subTotal, setSubTotal] = useState(0);
+  const [operand, setOperand] = useState('');
+  const [operator, setOperator] = useState('');
 
   const handleClear = () => {
-    setOperand(null);
+    setSubTotal(0);
+    setOperand('');
+    setOperator('');
   }
 
   const handleNumberKey = (value) => {
@@ -22,12 +26,44 @@ function App() {
     setOperand(newOperand);
   };
 
+  const updateSubtotal = () => {
+    let newSubTotal;
+    if (!operator) {
+      // This is the first operation in the chain
+      newSubTotal = parseFloat(operand || 0);
+    } else {
+      // eslint-disable-next-line no-eval
+      newSubTotal = eval(`${subTotal.toString(10)} ${operator} ${operand}`);
+    }
+    setSubTotal(newSubTotal);
+  }
+
+  const handleOperatorKey = (operatorKey) => {
+    if (operand) {
+      updateSubtotal();
+    }
+    setOperator(operatorKey === '=' ? '' : operatorKey);
+    setOperand('');
+  };
+
+  const handleMemoryRead = () => {
+    console.log('Implement me');
+  };
+
+  const handleMemoryStore = () => {
+    console.log('Implement me');
+  };
+
   return (
     <div className="App">
-      <Display value={operand || '0'} />
+      <Display value={operand || subTotal.toString(10)} />
       <Keypad
         handleNumberKey={handleNumberKey}
+        handleOperatorKey={handleOperatorKey}
         handleClear={handleClear}
+        handleMemoryRead={handleMemoryRead}
+        handleMemoryStore={handleMemoryStore}
+        decimalEnabled={!operand.includes('.')}
       />
     </div>
   );
