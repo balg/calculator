@@ -26,6 +26,19 @@ function App() {
     setOperand(newOperand);
   };
 
+  const handleOperatorKey = (operatorKey) => {
+    try {
+      if (operand) {
+        updateSubtotal();
+      }
+      setOperator(operatorKey === '=' ? '' : operatorKey);
+      setOperand('');
+    } catch (e) {
+      window.alert(`No, no: ${e.message}`);
+      handleClear();
+    }
+  };
+
   const updateSubtotal = () => {
     let newSubTotal;
     if (!operator) {
@@ -33,18 +46,11 @@ function App() {
       newSubTotal = parseFloat(operand || 0);
     } else {
       // eslint-disable-next-line no-eval
+      if (operator === '/' && operand === '0') throw new Error('Division by zero.');
       newSubTotal = eval(`${subTotal.toString(10)} ${operator} ${operand}`);
     }
     setSubTotal(newSubTotal);
   }
-
-  const handleOperatorKey = (operatorKey) => {
-    if (operand) {
-      updateSubtotal();
-    }
-    setOperator(operatorKey === '=' ? '' : operatorKey);
-    setOperand('');
-  };
 
   const handleMemoryRead = () => {
     console.log('Implement me');
