@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Keypad from './components/Keypad/Keypad';
+import Display from './components/Display/Display';
 import './App.css';
 
 function App() {
+  const [operand, setOperand] = useState(null);
+
+  const handleClear = () => {
+    setOperand(null);
+  }
+
+  const handleNumberKey = (value) => {
+    let newOperand = '';
+    if (!operand && value === '.') {
+      newOperand = '0.';
+    } else if ((!operand || operand === '0') && value !== '.') {
+      newOperand = value;
+    } else {
+      newOperand = `${operand || ''}${value}`;
+    }
+    setOperand(newOperand);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Display value={operand || '0'} />
+      <Keypad
+        handleNumberKey={handleNumberKey}
+        handleClear={handleClear}
+      />
     </div>
   );
 }
