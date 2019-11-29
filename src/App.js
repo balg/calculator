@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Keypad from './components/Keypad/Keypad';
 import Display from './components/Display/Display';
 import './App.css';
@@ -7,6 +8,7 @@ function App() {
   const [subTotal, setSubTotal] = useState(0);
   const [operand, setOperand] = useState('');
   const [operator, setOperator] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClear = () => {
     setSubTotal(0);
@@ -54,12 +56,32 @@ function App() {
     setSubTotal(newSubTotal);
   }
 
-  const handleMemoryRead = () => {
-    console.log('Implement me');
+  const handleMemoryRead = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_CALCULATOR_SERVICE_ENDPOINT}/memory`
+      );
+      if (data !== null) {
+        setOperand(data.toString());
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setIsLoading(false);
   };
 
-  const handleMemoryStore = () => {
-    console.log('Implement me');
+  const handleMemoryStore = async () => {
+    try {
+      setIsLoading(true);
+      const number = operand || subTotal;
+      await axios.put(
+        `${process.env.REACT_APP_CALCULATOR_SERVICE_ENDPOINT}/memory/${number}`
+      );
+    } catch (e) {
+      console.error(e);
+    }
+    setIsLoading(false);
   };
 
   return (
