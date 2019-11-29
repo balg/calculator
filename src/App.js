@@ -14,7 +14,8 @@ function App() {
     setOperator('');
   }
 
-  const handleNumberKey = (value) => {
+  const handleNumberKey = (event) => {
+    const value = event.target.name;
     let newOperand = '';
     if (!operand && value === '.') {
       newOperand = '0.';
@@ -26,7 +27,8 @@ function App() {
     setOperand(newOperand);
   };
 
-  const handleOperatorKey = (operatorKey) => {
+  const handleOperatorKey = (event) => {
+    const operatorKey = event.target.name;
     try {
       if (operand) {
         updateSubtotal();
