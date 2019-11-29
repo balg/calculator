@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Keypad from './components/Keypad/Keypad';
 import Display from './components/Display/Display';
+import Spinner from './components/Spinner/Spinner';
 import './App.css';
 
 function App() {
@@ -87,14 +88,22 @@ function App() {
   return (
     <div className="App">
       <Display value={operand || subTotal.toString(10)} />
-      <Keypad
-        handleNumberKey={handleNumberKey}
-        handleOperatorKey={handleOperatorKey}
-        handleClear={handleClear}
-        handleMemoryRead={handleMemoryRead}
-        handleMemoryStore={handleMemoryStore}
-        decimalEnabled={!operand.includes('.')}
-      />
+      {
+        isLoading
+          ? (
+            <Spinner />
+          )
+          : (
+            <Keypad
+              handleNumberKey={handleNumberKey}
+              handleOperatorKey={handleOperatorKey}
+              handleClear={handleClear}
+              handleMemoryRead={handleMemoryRead}
+              handleMemoryStore={handleMemoryStore}
+              decimalEnabled={!operand.includes('.')}
+            />
+          )
+      }
     </div>
   );
 }
